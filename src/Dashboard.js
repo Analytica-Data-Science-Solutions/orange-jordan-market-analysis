@@ -453,7 +453,7 @@ const Dashboard = () => {
         </div>
       </div>
       
-      <div className="bg-white p-4 rounded-lg shadow-md">
+      <div className="bg-white p-4 mt-8 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Analytica's AI Solutions for Orange Jordan</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SolutionCard 
