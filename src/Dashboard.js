@@ -1,17 +1,14 @@
 /* eslint-disable */
-// import React, { useState } from 'react';
-// import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Area, AreaChart,  LabelList } from 'recharts';
-// import { Smartphone, Users, Globe, Shield, BookOpen, UserPlus, DollarSign, Zap, MessageCircle } from 'lucide-react';
-
 import React, { useState } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
-  ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Area, AreaChart, LabelList 
+  ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Area, AreaChart, 
+  LabelList, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
 } from 'recharts';
 import { 
-  Smartphone, Users, Globe, Shield, BookOpen, UserPlus, DollarSign 
+  Smartphone, Users, Globe, Shield, BookOpen, UserPlus, DollarSign, 
+  Zap, MessageCircle
 } from 'lucide-react';
-
 
 const AlertBox = ({ title, content }) => (
     <div style={{
@@ -25,8 +22,6 @@ const AlertBox = ({ title, content }) => (
       <p>{content}</p>
     </div>
 );
-
-
 
 const marketShareData = [
   { name: 'Orange Jordan', value: 35, color: '#FFA500' },
@@ -89,6 +84,7 @@ const digitalAdoptionData = [
 
 const Dashboard = () => {
   const [selectedPainPoint, setSelectedPainPoint] = useState('Market Share');
+  const [selectedCompetitorMetric, setSelectedCompetitorMetric] = useState('ARPU');
 
   const painPoints = [
     { name: 'Market Share', icon: Users },
@@ -111,6 +107,92 @@ const Dashboard = () => {
       </div>
     </div>
   );
+
+  const competitorMetrics = [
+    { name: 'ARPU', icon: DollarSign },
+    { name: 'Churn Rate', icon: Users },
+    { name: 'Customer Satisfaction', icon: MessageCircle },
+  ];
+
+  const CompetitorMetricCard = ({ metric, isSelected, onClick }) => (
+    <div 
+      className={`p-4 rounded-lg shadow-md cursor-pointer transition-all ${isSelected ? 'bg-blue-500 text-white' : 'bg-white hover:bg-blue-100'}`}
+      onClick={() => onClick(metric.name)}
+    >
+      <div className="flex items-center mb-2">
+        {React.createElement(metric.icon, { size: 24, className: "mr-2" })}
+        <h3 className="text-lg font-semibold">{metric.name}</h3>
+      </div>
+    </div>
+  );
+
+  const renderCompetitorChart = () => {
+    switch(selectedCompetitorMetric) {
+      case 'ARPU':
+        const arpuData = [
+          { year: 2020, Orange: 6.7, Zain: 7.0, Umniah: 6.2 },
+          { year: 2021, Orange: 6.6, Zain: 7.1, Umniah: 6.1 },
+          { year: 2022, Orange: 6.5, Zain: 7.2, Umniah: 6.0 },
+        ];
+        return (
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart data={arpuData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis domain={[5.5, 7.5]} label={{ value: 'ARPU (JOD/month)', angle: -90, position: 'insideLeft' }} />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="Orange" stroke="#FFA500" strokeWidth={2} />
+              <Line type="monotone" dataKey="Zain" stroke="#008000" strokeWidth={2} />
+              <Line type="monotone" dataKey="Umniah" stroke="#0000FF" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
+        );
+      case 'Churn Rate':
+        const churnData = [
+          { name: 'Orange Jordan', value: 3.5 },
+          { name: 'Zain Jordan', value: 2.8 },
+          { name: 'Umniah', value: 4.2 },
+        ];
+        return (
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={churnData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis label={{ value: 'Churn Rate (%)', angle: -90, position: 'insideLeft' }} />
+              <Tooltip />
+              <Bar dataKey="value" fill="#8884d8">
+                {churnData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={marketShareData[index].color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        );
+      case 'Customer Satisfaction':
+        const satisfactionData = [
+          { aspect: 'Overall', Orange: 7.2, Zain: 7.8, Umniah: 7.0 },
+          { aspect: 'Network Quality', Orange: 7.0, Zain: 8.0, Umniah: 6.8 },
+          { aspect: 'Customer Service', Orange: 7.5, Zain: 7.9, Umniah: 7.2 },
+          { aspect: 'Value for Money', Orange: 7.1, Zain: 7.5, Umniah: 7.3 },
+        ];
+        return (
+          <ResponsiveContainer width="100%" height={400}>
+            <RadarChart outerRadius={150} data={satisfactionData}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="aspect" />
+              <PolarRadiusAxis angle={30} domain={[0, 10]} />
+              <Radar name="Orange Jordan" dataKey="Orange" stroke="#FFA500" fill="#FFA500" fillOpacity={0.6} />
+              <Radar name="Zain Jordan" dataKey="Zain" stroke="#008000" fill="#008000" fillOpacity={0.6} />
+              <Radar name="Umniah" dataKey="Umniah" stroke="#0000FF" fill="#0000FF" fillOpacity={0.6} />
+              <Legend />
+            </RadarChart>
+          </ResponsiveContainer>
+        );
+      default:
+        return <p>Select a competitor metric to view detailed data.</p>;
+    }
+  };
 
   const renderChart = () => {
     switch(selectedPainPoint) {
@@ -346,6 +428,31 @@ const Dashboard = () => {
         </div>
       </div>
       
+      <div className="mt-8 bg-white p-4 rounded-lg shadow-md">
+        <h2 className="text-2xl font-semibold mb-4">Detailed Competitor Analysis</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div className="col-span-1">
+            <h3 className="text-xl font-semibold mb-4">Select Metric</h3>
+            <div className="grid grid-cols-1 gap-4">
+              {competitorMetrics.map((metric) => (
+                <CompetitorMetricCard 
+                  key={metric.name} 
+                  metric={metric} 
+                  isSelected={selectedCompetitorMetric === metric.name}
+                  onClick={setSelectedCompetitorMetric}
+                />
+              ))}
+            </div>
+          </div>
+          
+          <div className="col-span-2">
+            <h3 className="text-xl font-semibold mb-4">{selectedCompetitorMetric}</h3>
+            {renderCompetitorChart()}
+            {getCompetitorInsights(selectedCompetitorMetric)}
+          </div>
+        </div>
+      </div>
+      
       <div className="bg-white p-4 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Analytica's AI Solutions for Orange Jordan</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -422,6 +529,46 @@ function getDescription(painPoint) {
       return "There's a significant gap between demand and supply for critical skills like AI, data science, and cybersecurity. This skills gap can hinder innovation and digital transformation efforts.";
     default:
       return "Select a pain point to view detailed information.";
+  }
+}
+
+function getCompetitorInsights(metric) {
+  switch (metric) {
+    case 'ARPU':
+      return (
+        <div className="mt-4">
+          <h4 className="text-lg font-semibold">Insights:</h4>
+          <ul className="list-disc pl-5 mt-2">
+            <li>Zain enjoys the highest ARPU, driven by its larger postpaid subscriber base and higher data usage.</li>
+            <li>Orange Jordan's ARPU is under pressure from price competition and declining voice revenue.</li>
+            <li>Umniah's focus on the prepaid segment contributes to its lower ARPU.</li>
+          </ul>
+        </div>
+      );
+    case 'Churn Rate':
+      return (
+        <div className="mt-4">
+          <h4 className="text-lg font-semibold">Insights:</h4>
+          <ul className="list-disc pl-5 mt-2">
+            <li>Zain boasts the lowest churn rate, indicating strong customer loyalty and network satisfaction.</li>
+            <li>Orange Jordan's churn rate is higher, potentially due to network quality concerns and competitive pressure.</li>
+            <li>Umniah's higher churn rate reflects the price-sensitive nature of its prepaid customer base.</li>
+          </ul>
+        </div>
+      );
+    case 'Customer Satisfaction':
+      return (
+        <div className="mt-4">
+          <h4 className="text-lg font-semibold">Insights:</h4>
+          <ul className="list-disc pl-5 mt-2">
+            <li>Zain consistently receives the highest customer satisfaction scores, reflecting its strong network performance and customer service.</li>
+            <li>Orange Jordan's customer satisfaction scores are slightly lower, indicating room for improvement in network quality and customer service.</li>
+            <li>Umniah's focus on affordability drives its customer satisfaction, but network quality can be a concern.</li>
+          </ul>
+        </div>
+      );
+    default:
+      return null;
   }
 }
 
