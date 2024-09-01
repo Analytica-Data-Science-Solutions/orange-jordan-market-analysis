@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/orange-jordan-market-analysis/static/css/main.9a6cf0b6.css",
-    "main.js": "/orange-jordan-market-analysis/static/js/main.ea4ebdf8.js",
+    "main.js": "/orange-jordan-market-analysis/static/js/main.9423d5dc.js",
     "static/js/453.48119352.chunk.js": "/orange-jordan-market-analysis/static/js/453.48119352.chunk.js",
     "index.html": "/orange-jordan-market-analysis/index.html",
     "main.9a6cf0b6.css.map": "/orange-jordan-market-analysis/static/css/main.9a6cf0b6.css.map",
-    "main.ea4ebdf8.js.map": "/orange-jordan-market-analysis/static/js/main.ea4ebdf8.js.map",
+    "main.9423d5dc.js.map": "/orange-jordan-market-analysis/static/js/main.9423d5dc.js.map",
     "453.48119352.chunk.js.map": "/orange-jordan-market-analysis/static/js/453.48119352.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9a6cf0b6.css",
-    "static/js/main.ea4ebdf8.js"
+    "static/js/main.9423d5dc.js"
   ]
 }
